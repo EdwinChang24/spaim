@@ -31,29 +31,27 @@ fun main(args: Array<String>): Unit =
 
 tailrec fun ProgramState.execLoop(): ProgramState =
     instructions[((programCounter - 0x400024u) / 4u).toInt()].let { instruction ->
-        copy(programCounter = programCounter + 4u).run {
-            when {
-                // nop
-                instruction == 0u -> this
-                // syscall
-                instruction == 0xCu -> syscalls.getOrElse(registers[2] ?: 0u) { error("unrecognized syscall") }()
-                // R
-                instruction shr 26 == 0u -> rInstructions.getOrElse(instruction and 0x3fu) { error("unrecognized R instruction") }(
-                    instruction shr 21 and 0x1f.toUInt(),
-                    instruction shr 16 and 0x1f.toUInt(),
-                    instruction shr 11 and 0x1f.toUInt(),
-                    instruction shr 6 and 0x1f.toUInt()
-                )
-                // J
-                instruction shr 26 in setOf(2u, 3u) -> {
-                    jInstructions.getOrElse(instruction shr 26) { error("unrecognized J instruction") }(
-                        instruction and 0x3ffffffu
-                    )
-                }
-                // I
-                else -> iInstructions.getOrElse(instruction shr 26) { error("unrecognized I instruction") }(
-                    instruction shr 21 and 0x1fu, instruction shr 16 and 0x1fu, instruction and 0xffu
+        when {
+            // nop
+            instruction == 0u -> this
+            // syscall
+            instruction == 0xCu -> syscalls.getOrElse(registers[2] ?: 0u) { error("unrecognized syscall") }()
+            // R
+            instruction shr 26 == 0u -> rInstructions.getOrElse(instruction and 0x3fu) { error("unrecognized R instruction") }(
+                instruction shr 21 and 0x1f.toUInt(),
+                instruction shr 16 and 0x1f.toUInt(),
+                instruction shr 11 and 0x1f.toUInt(),
+                instruction shr 6 and 0x1f.toUInt()
+            )
+            // J
+            instruction shr 26 in setOf(2u, 3u) -> {
+                jInstructions.getOrElse(instruction shr 26) { error("unrecognized J instruction") }(
+                    instruction and 0x3ffffffu
                 )
             }
-        }
+            // I
+            else -> iInstructions.getOrElse(instruction shr 26) { error("unrecognized I instruction") }(
+                instruction shr 21 and 0x1fu, instruction shr 16 and 0x1fu, instruction and 0xffu
+            )
+        }.let { new -> new.copy(programCounter = new.programCounter + 4u) }
     }.execLoop()

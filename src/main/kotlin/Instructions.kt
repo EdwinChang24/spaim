@@ -73,6 +73,7 @@ val rInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, rd: UInt, sham
                 .apply { if (rd != 0u) set(rd, (registers[rs] ?: 0u) - (registers[rt] ?: 0u)) })
     })
 
+@OptIn(ExperimentalStdlibApi::class)
 val iInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, immediate: UInt) -> ProgramState>(
     // addi
     0x8u to { rs, rt, immediate ->
@@ -94,13 +95,13 @@ val iInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, immediate: UIn
     // beq
     0x4u to { rs, rt, immediate ->
         copy(
-            programCounter = if (registers[rs] == registers[rt]) programCounter + 4u + ((immediate.toInt() shl 16 shr 13 and 0x3ffff).toUInt() + (immediate shl 2)) else programCounter
+            programCounter = if (registers[rs] == registers[rt]) programCounter - 4u + (immediate.toInt() shl 16 shr 14).toUInt() else programCounter
         )
     },
     // bne
     0x5u to { rs, rt, immediate ->
         copy(
-            programCounter = if (registers[rs] != registers[rt]) programCounter + 4u + ((immediate.toInt() shl 16 shr 13 and 0x3ffff).toUInt() + (immediate shl 2)) else programCounter
+            programCounter = if (registers[rs] != registers[rt]) programCounter - 4u + (immediate.toInt() shl 16 shr 14).toUInt() else programCounter
         )
     },
     // ll
@@ -158,9 +159,10 @@ val iInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, immediate: UIn
 
 val jInstructions = mapOf<UInt, ProgramState.(address: UInt) -> ProgramState>(
     // j
-    0x2u to { address -> copy(programCounter = address) },
+    0x2u to { address -> copy(programCounter = ((programCounter + 4u) shr 28 shl 28) + (address shl 2) - 4u) },
     // jal
     0x3u to { address ->
         copy(
-            programCounter = address, registers = registers.toMutableList().apply { set(31, programCounter + 8u) })
+            programCounter = ((programCounter + 4u) shr 28 shl 28) + (address shl 2) - 4u,
+            registers = registers.toMutableList().apply { set(31, programCounter + 4u) })
     })
