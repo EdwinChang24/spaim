@@ -36,7 +36,7 @@ tailrec fun ProgramState.execLoop(): ProgramState =
                 // nop
                 instruction == 0u -> this
                 // syscall
-                instruction == 0xCu -> error("syscalls not implemented yet")
+                instruction == 0xCu -> syscalls.getOrElse(registers[2] ?: 0u) { error("unrecognized syscall") }()
                 // R
                 instruction shr 26 == 0u -> rInstructions.getOrElse(instruction and 0x3fu) { error("unrecognized R instruction") }(
                     instruction shr 21 and 0x1f.toUInt(),
