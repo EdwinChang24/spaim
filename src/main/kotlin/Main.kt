@@ -39,7 +39,7 @@ tailrec fun ProgramState.execLoop(config: Config): ProgramState =
             // nop
             instruction == 0u -> this
             // syscall
-            instruction == 0xcu -> syscalls[registers[2] ?: 0u]?.invoke(this) ?: also {
+            instruction == 0xcu -> syscalls[registers[2] ?: 0u]?.invoke(this, config) ?: also {
                 config.syscalls.firstOrNull { it.code.toUInt() == (registers[2] ?: 0u) }
                     ?.let { ProcessBuilder(listOf(it.run) + it.args).start().waitFor() }
                     ?: error("unrecognized syscall")

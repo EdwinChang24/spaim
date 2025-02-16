@@ -1,5 +1,9 @@
 [versions]
-serialization = "1.8.0"
+ktor = "3.1.0"
+slf4j-nop = "2.0.16"
 
 [libraries]
-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+ktor-client = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+slf4j-nop = { group = "org.slf4j", name = "slf4j-nop", version.ref = "slf4j-nop" }

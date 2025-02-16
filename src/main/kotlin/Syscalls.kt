@@ -2,15 +2,19 @@ package dev.edwinchang
 
 import kotlin.system.exitProcess
 
-val syscalls = mapOf<UInt, ProgramState.() -> ProgramState>(
+val syscalls = mapOf<UInt, ProgramState.(config: Config) -> ProgramState>(
     // print int
     1u to { apply { print(registers[4]?.toInt() ?: 0) } },
     // print string
     4u to {
         apply {
-            print(data.subList((((registers[4] ?: 0u) - 0x10000000u) / 4u).toInt(), data.size).asSequence().map { u ->
+            @Suppress("DuplicatedCode") print(
+                data.subList(
+                (((registers[4] ?: 0u) - 0x10000000u) / 4u).toInt(), data.size
+            ).asSequence().map { u ->
                 listOf(u shl 24, u shl 16, u shl 8, u).map { it shr 24 }
-            }.flatten().takeWhile { it != 0u }.map { it.toInt().toChar() }.joinToString(""))
+            }.flatten().takeWhile { it != 0u }.map { it.toInt().toChar() }.joinToString("")
+            )
         }
     },
     // read int
@@ -30,4 +34,6 @@ val syscalls = mapOf<UInt, ProgramState.() -> ProgramState>(
     },
     // exit
     10u to { exitProcess(0) },
+    // ollama
+    11434u to { config -> ollama(config) },
 )

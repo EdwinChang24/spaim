@@ -73,7 +73,6 @@ val rInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, rd: UInt, sham
                 .apply { if (rd != 0u) set(rd, (registers[rs] ?: 0u) - (registers[rt] ?: 0u)) })
     })
 
-@OptIn(ExperimentalStdlibApi::class)
 val iInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, immediate: UInt) -> ProgramState>(
     // addi
     0x8u to { rs, rt, immediate ->
