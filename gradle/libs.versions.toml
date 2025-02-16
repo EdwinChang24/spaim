@@ -1,0 +1,5 @@
+[versions]
+serialization = "1.8.0"
+
+[libraries]
+serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
