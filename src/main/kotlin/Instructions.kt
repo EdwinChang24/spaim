@@ -122,7 +122,7 @@ val iInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, immediate: UIn
         copy(
             registers = registers.toMutableList().apply {
                 if (rt != 0u) set(
-                    rt, data[((registers[rs] ?: 0u) + (immediate.toInt() shl 16 shr 16).toUInt()) / 4u]
+                    rt, data[((registers[rs] ?: 0u) + (immediate.toInt() shl 16 shr 16).toUInt() - 0x10000000u) / 4u]
                 )
             })
     },
@@ -153,7 +153,10 @@ val iInstructions = mapOf<UInt, ProgramState.(rs: UInt, rt: UInt, immediate: UIn
     0x2bu to { rs, rt, immediate ->
         copy(
             data = data.toMutableList().apply {
-                set(((registers[rs] ?: 0u) + (immediate.toInt() shl 16 shr 16).toUInt()) / 4u, (registers[rt] ?: 0u))
+                set(
+                    ((registers[rs] ?: 0u) + (immediate.toInt() shl 16 shr 16).toUInt() - 0x10000000u) / 4u,
+                    (registers[rt] ?: 0u)
+                )
             })
     })
 

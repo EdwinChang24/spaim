@@ -24,9 +24,10 @@ fun main(args: Array<String>): Unit =
             ) { state: ProgramState, (section, line) ->
                 state.copy(
                     instructions = state.instructions + if (section == ".text") line.split(", ")
-                        .filter { it.isNotBlank() }.map { it.removePrefix("0x").toUInt(16) } else emptyList(),
+                        .filter { it.isNotBlank() }
+                        .map { it.removePrefix("0x").removeSuffix(",").toUInt(16) } else emptyList(),
                     data = state.data + if (section == ".data") line.split(", ").filter { it.isNotBlank() }
-                        .map { it.removePrefix("0x").toUInt(16) } else emptyList())
+                        .map { it.removePrefix("0x").removeSuffix(",").toUInt(16) } else emptyList())
             }
             // run the loop
             .run { execLoop(config) }
