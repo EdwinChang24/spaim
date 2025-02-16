@@ -51,7 +51,7 @@ tailrec fun ProgramState.execLoop(): ProgramState =
             }
             // I
             else -> iInstructions.getOrElse(instruction shr 26) { error("unrecognized I instruction") }(
-                instruction shr 21 and 0x1fu, instruction shr 16 and 0x1fu, instruction and 0xffu
+                instruction shr 21 and 0x1fu, instruction shr 16 and 0x1fu, instruction and 0xffffu
             )
         }.let { new -> new.copy(programCounter = new.programCounter + 4u) }
     }.execLoop()
