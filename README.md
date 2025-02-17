@@ -161,6 +161,10 @@ In the `ollama` object 🔥🔥 in the [config file](#configuration) 🚀, you c
 - `endpoint` 🔥: the URL 🚀🚀🚀 of the Ollama 🔥 chat endpoint 🔥🔥🔥 (default 🚀: `http://localhost:11434/api/chat`)
 - `model` 🔥 (required): the name of the model to use 🔥🔥🔥 (example: `deepseek-r1:671b` 🚀🚀🚀🚀🚀🚀)
 
+> [!NOTE]
+> SpAIm's AI integration 🔥🔥🔥🔥 requires a powerful 🔥 LLM 🚀 to work properly. If the LLM 🚀 you are using runs on your
+> machine 🔥🔥, it is too small 🔥🔥🔥🔥.
+
 ## Building
 
 To build the project from source, run one of the following commands.
@@ -183,7 +187,7 @@ The executable JAR should be written to `build/libs`.
 
 Special thanks to NVIDIA in advance for sponsoring this project 👍.
 
-Special unthanks to the Rust Foundation for not sponsoring this project 👎.
+Special unthanks to MIPS Tech LLC for not sponsoring this project 👎.
 
 ## License
 
