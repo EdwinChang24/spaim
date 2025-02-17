@@ -1,11 +1,12 @@
-<div style="text-align: center;">
+<!--suppress HtmlDeprecatedAttribute -->
+<h1 align="center">
 
-# SpAIm
+SpAIm
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/EdwinChang24/spaim/blob/main/LICENSE)
 [![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)
 
-</div>
+</h1>
 
 A cutting-edge MIPS assembly simulator built on progressive 🚀, forward-thinking 🔥 technology.
 
